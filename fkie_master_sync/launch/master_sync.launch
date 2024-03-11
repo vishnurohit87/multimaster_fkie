@@ -1,5 +1,5 @@
 <launch>
-  <node name="master_sync" pkg="fkie_master_sync" type="master_sync">
+  <node name="master_sync" pkg="fkie_master_sync" type="master_sync" respawn="true">
     <!-- Performs resync after the host was offline: unregister and register again to avoid connection losses to python topic. These does not suppot reconnection! -->
     <param name="resync_on_reconnect" value="True" />
     <!-- A configurable period that controls how long the offline-online period [sec] is before the resync kicks in.
@@ -36,11 +36,20 @@
     <rosparam param="ignore_subscribers">[]</rosparam>
 
     <!-- The list of topics to synchronize. The ~ignore_nodes and ~ignore_topics lists are processed first. -->
-    <rosparam param="sync_topics">[]</rosparam>
+    <rosparam param="sync_topics">[
+        '/mocap_node/frl_uas*/pose']</rosparam>
+        
+        <!-- '/frl_uas*/simplenav/homePose',
+        '/frl_uas*/simplenav/odom',
+        '/frl_uas*/simplenav/takeoffAltitude',
+        '/frl_uas*/dji_sdk/flight_status',
+        '/mocap_node/frl_uas*/pose']</rosparam -->
+        <!-- '/tf', -->
+        <!-- '/tf_static']</rosparam> -->
 
     <!-- The list of services, which are to be ignored while a synchroniation. The ~ignore_nodes list is processed first.
     These are defaults and cannot be removed: ['/*get_loggers', '/*set_logger_level'] -->
-    <rosparam param="ignore_services">[]</rosparam>
+    <rosparam param="ignore_services">['/frl_uas*']</rosparam>
 
     <!-- The list of services to synchronize. The ~ignore_nodes and ~ignore_services lists are processed first. -->
     <rosparam param="sync_services">[]</rosparam>
@@ -55,9 +64,8 @@
     <!-- The nodes which are running not at the same host as the ROS master are not synchronized by default. Use sync_remote_nodes to sync these nodes also. -->
     <param name="sync_remote_nodes" value="False" />
 
-    <!-- checks for eqaul hostname of topic provider and master uri. Usefull on warning "Wait for topic with type..." still if master_discovery is running. -->
-    <param name="check_host" value="True" />
 
 
   </node>
 </launch>
+
